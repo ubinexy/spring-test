@@ -97,9 +97,21 @@ public class RsController {
 
   @PostMapping("/rs/buy/{id}")
   public ResponseEntity buy(@PathVariable int id, @RequestBody Trade trade){
-    rsService.buy(trade, id);
-    return ResponseEntity.ok().build();
+    try {
+      trade.setRsEventId(id);
+      rsService.buy(trade, id);
+      return ResponseEntity.ok().build();
+    } catch (RuntimeException e) {
+      return ResponseEntity.badRequest().build();
+    }
   }
+
+
+//  @PostMapping("/rs/rankings/")
+//  public ResponseEntity showRankingList(){
+//    rsService.getRankList();
+//    return ResponseEntity.ok().build();
+//  }
 
 
   @ExceptionHandler(RequestNotValidException.class)
